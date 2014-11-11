@@ -1,0 +1,20 @@
+################## R E P O R T    S T R U C T U R E ###################
+
+1. Introduction
+	a. Motivation 
+2. Background
+	a. kNN - naive and kdtree approaches
+	b. SMP enabled development
+3. Methods
+	a. overview
+	b. algorithms
+	c. class diagrams
+	d. dataset description & pruning
+4. Experiments and Results
+	a. Performance comparison of naive kNN with kdtree based kNN
+	b. Performance comparison of kdtree based kNN with thread count
+	c. Performance comparison of with varying feature set & k (kNN)
+	d. Analysis of best results for sub-population identification
+5. Conclusion
+
+#######################################################################

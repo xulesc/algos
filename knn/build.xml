@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="assignment">
+	<property environment="env" />
+	<property name="ECLIPSE_HOME" value="/opt/eclipse" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+	<path id="assignment.classpath">
+		<pathelement location="build" />
+	</path>
+	<target name="init">
+		<mkdir dir="build" />
+		<copy includeemptydirs="false" todir="build">
+			<fileset dir="src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="build" />
+	</target>
+	<target depends="clean" name="cleanall" />
+	<target depends="build-subprojects,build-project" name="build" />
+	<target name="build-subprojects" />
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="build" includeantruntime="false" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="assignment.classpath" />
+		</javac>
+	</target>
+	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects" />
+	<target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+		<copy todir="${ant.library.dir}">
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar" />
+		</copy>
+		<unzip dest="${ant.library.dir}">
+			<patternset includes="jdtCompilerAdapter.jar" />
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar" />
+		</unzip>
+	</target>
+	<target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter" />
+		<antcall target="build" />
+	</target>
+	<!-- run this to preprocess the data -->
+	<target name="DiabetesMLPrep">
+		<java classname="com.as.pms510.DiabetesML" failonerror="true" fork="yes">
+			<arg line="data/diabetic_data.csv prep" />
+			<classpath refid="assignment.classpath" />
+		</java>
+	</target>
+	<!-- run this to generate seperate numeric and nominal datas -->
+	<target name="DiabetesMLNomn">
+		<java classname="com.as.pms510.DiabetesML" failonerror="true" fork="yes">
+			<arg line="data/diabetic_data.csv.non_num nomn" />
+			<classpath refid="assignment.classpath" />
+		</java>
+	</target>
+	<!-- run this to benchmark -->
+	<target name="DiabetesMLBench">
+		<java classname="com.as.pms510.DiabetesML" failonerror="true" fork="yes">
+			<arg line="data/diabetic_data.csv bench" />
+			<classpath refid="assignment.classpath" />
+		</java>
+	</target>
+	<!-- run this to clusterify -->
+	<target name="DiabetesMLClust">
+		<java classname="com.as.pms510.DiabetesML" failonerror="true" fork="yes">
+			<arg line="data/diabetic_data.csv clust" />
+			<classpath refid="assignment.classpath" />
+		</java>
+	</target>
+	<!-- run this to reduce -->
+	<target name="DiabetesMLReduce">
+		<java classname="com.as.pms510.DiabetesML" failonerror="true" fork="yes">
+			<arg line="data/diabetic_data.csv reduce" />
+			<classpath refid="assignment.classpath" />
+		</java>
+	</target>
+	<!-- run this to reduce -->
+	<target name="DiabetesMLClust2">
+		<java classname="com.as.pms510.DiabetesML" failonerror="true" fork="yes">
+			<arg line="data/diabetic_data.csv clust2" />
+			<classpath refid="assignment.classpath" />
+		</java>
+	</target>
+</project>
