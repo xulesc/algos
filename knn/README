@@ -1,0 +1,9 @@
+Single and multi-threaded java implementations of KDTree based
+KNN. Some python scripts for fast experimentation also included.
+
+The project was an attempt at studying the speedup that can be
+achieved with simple thread based parallelization in KNN queries.
+This was something i worked on during an college assignment.
+
+In this work the 'Diabetes 130-US hospitals for years 1999-2008 Data 
+Set' from the UCI Machine Learning Repository was used. 
