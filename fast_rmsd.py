@@ -4,8 +4,8 @@
 Based on The QCP Superposition Method discussed in detail at: http://theobald.brandeis.edu/qcp/
 '''
 
-def fast_calc_rmsd(A, E0, t_len, minScore = 0, evalprec = 1e-11):
-  C = [0] * 3; rot = [0] * 9;
+def fast_calc_rmsd(A, E0, minScore = 0, evalprec = 1e-11):
+  C = [0] * 3; 
   Sxx = A[0]; Sxy = A[1]; Sxz = A[2];
   Syx = A[3]; Syy = A[4]; Syz = A[5];
   Szx = A[6]; Szy = A[7]; Szz = A[8];
@@ -60,7 +60,7 @@ def fast_calc_rmsd(A, E0, t_len, minScore = 0, evalprec = 1e-11):
     print("\nMore than %d iterations needed!\n", i);
 
   #
-  rms = (abs(2 * (E0 - mxEigenV)/t_len)) ** 0.5;
+  rms = abs(2 * (E0 - mxEigenV));
   rmsd = rms;
 
   if minScore > 0:
@@ -80,35 +80,8 @@ def fast_calc_rmsd(A, E0, t_len, minScore = 0, evalprec = 1e-11):
   q4 = -a21*a3243_4233+a22*a3143_4133-a23*a3142_4132;
 
   qsqr = q1**2 + q2**2 + q3**2 + q4**2
-  normq = qsqr**0.5;
-  q1 /= normq;
-  q2 /= normq;
-  q3 /= normq;
-  q4 /= normq;
-
-  a2 = q1 * q1;
-  x2 = q2 * q2;
-  y2 = q3 * q3;
-  z2 = q4 * q4;
-
-  xy = q2 * q3;
-  az = q1 * q4;
-  zx = q4 * q2;
-  ay = q1 * q3;
-  yz = q3 * q4;
-  ax = q1 * q2;
-
-  rot[0] = a2 + x2 - y2 - z2;
-  rot[1] = 2 * (xy + az);
-  rot[2] = 2 * (zx - ay);
-  rot[3] = 2 * (xy - az);
-  rot[4] = a2 - x2 + y2 - z2;
-  rot[5] = 2 * (yz + ax);
-  rot[6] = 2 * (zx + ay);
-  rot[7] = 2 * (yz - ax);
-  rot[8] = a2 - x2 - y2 + z2;
   
-  return (rmsd, rot, (q1, q2, q3, q4))
+  return (rmsd, (q1, q2, q3, q4))
 
 def inner_product(coords1, coords2, weight = None):
   A = [0] * 9; G1 = 0; G2 = 0
@@ -140,18 +113,54 @@ def center_coords(coords, weight = None):
     zsum /= l
   return [(x-xsum,y-ysum,z-zsum) for (x, y, z) in coords]
 
-def align(coords1, coords2):
+def align(coords1, coords2, verbose = False):
   centered_coords1 = center_coords(coords1)
   centered_coords2 = center_coords(coords2)
-  ##
   (E0, A) = inner_product(centered_coords1, centered_coords2)
-  return fast_calc_rmsd(A, E0, len(coords1))
+  (rmsd, quarts) = fast_calc_rmsd(A, E0)
+  if verbose:
+    print E0
+    print A
+    print quarts
+  ##
+  rot = [0] * 9
+  qsqr = 0
+  for q in quarts:
+    qsqr += q**2
+  (q1, q2, q3, q4) = quarts
+  a2 = q1 * q1 / qsqr;
+  x2 = q2 * q2 / qsqr;
+  y2 = q3 * q3 / qsqr;
+  z2 = q4 * q4 / qsqr;
+
+  xy = q2 * q3 / qsqr;
+  az = q1 * q4 / qsqr;
+  zx = q4 * q2 / qsqr;
+  ay = q1 * q3 / qsqr;
+  yz = q3 * q4 / qsqr;
+  ax = q1 * q2 / qsqr;
+
+  rot[0] = a2 + x2 - y2 - z2;
+  rot[1] = 2 * (xy + az);
+  rot[2] = 2 * (zx - ay);
+  rot[3] = 2 * (xy - az);
+  rot[4] = a2 - x2 + y2 - z2;
+  rot[5] = 2 * (yz + ax);
+  rot[6] = 2 * (zx + ay);
+  rot[7] = 2 * (yz - ax);
+  rot[8] = a2 - x2 - y2 + z2;
+  return (rmsd, rot, quarts)  
   
 def do_test(coords1, coords2, test_no):
-  (rmsd, rot, quarts) = align(coords1, coords2)
+  (rmsd, rot, quarts) = align(coords1, coords2, True)
+  qsqr = 0
+  for q in quarts:
+    qsqr += q**2
+  norm = qsqr**0.5
+  quarts = [q/norm for q in quarts]
   ## Result
   print '-----Test %d-----' %test_no
-  print rmsd
+  print (rmsd/len(coords1))**0.5
   for i in range(0,3):
     print (rot[3*i], rot[3*i+1], rot[3*i+2])
   print quarts
@@ -167,8 +176,9 @@ if __name__ == '__main__':
   ## Test 1
   do_test(coords1, coords2, 1)
   ## Test 2
-  coords1 = [(int(c[0]),int(c[1]),int(c[2])) for c in coords1]
-  coords2 = [(int(c[0]),int(c[1]),int(c[2])) for c in coords2]  
+  k=10
+  coords1 = [(int(c[0]*k),int(c[1]*k),int(c[2]*k)) for c in coords1]
+  coords2 = [(int(c[0]*k),int(c[1]*k),int(c[2]*k)) for c in coords2]  
   do_test(coords1, coords2, 2)
 
       
