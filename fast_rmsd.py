@@ -11,7 +11,7 @@ and for determining the optimal least-squares rotation matrix. Least-squares sup
 find the rotation matrix that minimizes the RMSD. The most common algorithms use an eigendecomposition, 
 a singular value decomposition, or an inversion of a small "key" matrix (of rank 3 or 4). The QCP 
 method avoids the costly matrix decomposition by taking advantage of special properties of the 
-quaternion representation of rotations and of the characteristic polynomial of the 4×4 "key" matrix. 
+quaternion representation.
 '''
 
 def fast_calc_rmsd(A, E0, minScore = 0, evalprec = 1e-11):
