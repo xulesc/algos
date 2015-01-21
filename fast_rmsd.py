@@ -140,12 +140,15 @@ def center_coords(coords, weight = None):
     zsum /= l
   return [(x-xsum,y-ysum,z-zsum) for (x, y, z) in coords]
 
-def align(coords1, coords2, test_no):
+def align(coords1, coords2):
   centered_coords1 = center_coords(coords1)
   centered_coords2 = center_coords(coords2)
   ##
   (E0, A) = inner_product(centered_coords1, centered_coords2)
-  (rmsd, rot, quarts) = fast_calc_rmsd(A, E0, len(coords1))
+  return fast_calc_rmsd(A, E0, len(coords1))
+  
+def do_test(coords1, coords2, test_no):
+  (rmsd, rot, quarts) = align(coords1, coords2)
   ## Result
   print '-----Test %d-----' %test_no
   print rmsd
@@ -162,11 +165,11 @@ if __name__ == '__main__':
     (-17.782,-14.852,16.171),(-16.124,-14.617,19.584),(-15.029,-11.037,18.902), \
     (-18.577,-10.001,17.996)]
   ## Test 1
-  align(coords1, coords2, 1)
+  do_test(coords1, coords2, 1)
   ## Test 2
   coords1 = [(int(c[0]),int(c[1]),int(c[2])) for c in coords1]
   coords2 = [(int(c[0]),int(c[1]),int(c[2])) for c in coords2]  
-  align(coords1, coords2, 2)
+  do_test(coords1, coords2, 2)
 
       
   
