@@ -123,10 +123,13 @@ def center_coords(coords, weight = None):
     zsum /= l
   return [(x-xsum,y-ysum,z-zsum) for (x, y, z) in coords]
 
-def align(coords1, coords2, verbose = False):
+def align(coords1, coords2, verbose = False, use_int = False):
   centered_coords1 = center_coords(coords1)
   centered_coords2 = center_coords(coords2)
   (E0, A) = inner_product(centered_coords1, centered_coords2)
+  if use_int:
+    E0 = int(E0)
+    A = [int(a) for a in A]
   (rmsd, quarts) = fast_calc_rmsd(A, E0)
   if verbose:
     print E0
@@ -161,8 +164,8 @@ def align(coords1, coords2, verbose = False):
   rot[8] = a2 - x2 - y2 + z2;
   return (rmsd, rot, quarts)  
   
-def do_test(coords1, coords2, test_no):
-  (rmsd, rot, quarts) = align(coords1, coords2, True)
+def do_test(coords1, coords2, test_no, use_int = False):
+  (rmsd, rot, quarts) = align(coords1, coords2, True, use_int)
   qsqr = 0
   for q in quarts:
     qsqr += q**2
@@ -186,10 +189,7 @@ if __name__ == '__main__':
   ## Test 1
   do_test(coords1, coords2, 1)
   ## Test 2
-  k=10
-  coords1 = [(int(c[0]*k),int(c[1]*k),int(c[2]*k)) for c in coords1]
-  coords2 = [(int(c[0]*k),int(c[1]*k),int(c[2]*k)) for c in coords2]  
-  do_test(coords1, coords2, 2)
+  do_test(coords1, coords2, 2, True)
 
       
   
