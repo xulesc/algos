@@ -3,7 +3,7 @@
  * given at http://csclab.murraystate.edu/bob.pilgrim/445/munkres.html
  *
  * Compile with __STANDALONE__ to include the main and make a standalone
- * program. Compiel with __CHATTY__ to pring out step by step Cost and
+ * program. Compile with __CHATTY__ to print out step by step Cost and
  * Mask matrices per iteration. Compile with __PYMOD__ to build as a
  * module callable from python
  */
