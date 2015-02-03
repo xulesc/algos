@@ -4,14 +4,21 @@
  *
  * Compile with __STANDALONE__ to include the main and make a standalone
  * program. Compiel with __CHATTY__ to pring out step by step Cost and
- * Mask matrices per iteration.
+ * Mask matrices per iteration. Compile with __PYMOD__ to build as a
+ * module callable from python
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#ifdef __PYMOD__
+#include <Python.h>
+#include "numpy/ndarraytypes.h"
+#include "numpy/arrayobject.h"
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 //                           F U N C T I O N   P R O T O T Y P E S				   //
+#ifndef __PYMOD__
 void step_one(int** matrix, int nrow, int ncol, int& step);
 void step_two(int** matrix, int nrow, int ncol, int* rowCover, int* colCover, int** m, int& step);
 void step_three(int nrow, int ncol, int* colCover, int** m, int& step);
@@ -31,11 +38,15 @@ void find_smallest(int** matrix, int nrow, int ncol, int* rowCover, int* colCove
                    int& minval) ;
 void step_six(int** matrix, int nrow, int ncol, int* rowCover, int* colCover, int& step);
 int** runMunkers(int** matrix, int nrow, int ncol, bool max);
+#endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void step_one(int** matrix, int nrow, int ncol, int& step) {
     int min_in_row;
 
@@ -48,6 +59,9 @@ void step_one(int** matrix, int nrow, int ncol, int& step) {
     step = 2;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void step_two(int** matrix, int nrow, int ncol, int* rowCover, int* colCover, int** m,
               int& step) {
     for (int r = 0; r < nrow; r++)
@@ -63,6 +77,9 @@ void step_two(int** matrix, int nrow, int ncol, int* rowCover, int* colCover, in
     step = 3;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void step_three(int nrow, int ncol, int* colCover, int** m, int& step) {
     int colcount;
     for (int r = 0; r < nrow; r++)
@@ -78,6 +95,9 @@ void step_three(int nrow, int ncol, int* colCover, int** m, int& step) {
     step = (colcount >= nrow || colcount >= ncol) ? 7 : 4;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void find_a_zero(int** matrix, int nrow, int ncol, int* rowCover, int* colCover, int& row,
                  int& col) {
     int r = 0;
@@ -104,6 +124,9 @@ void find_a_zero(int** matrix, int nrow, int ncol, int* rowCover, int* colCover,
     }
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 bool star_in_row(int** m, int ncol, int row) {
     for (int c = 0; c < ncol; c++)
         if (m[row][c] == 1)
@@ -111,6 +134,9 @@ bool star_in_row(int** m, int ncol, int row) {
     return false;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void find_star_in_row(int** m, int ncol, int row, int& col) {
     col = -1;
     for (int c = 0; c < ncol; c++)
@@ -118,6 +144,9 @@ void find_star_in_row(int** m, int ncol, int row, int& col) {
             col = c;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void step_four(int** matrix, int nrow, int ncol, int* rowCover, int* colCover, int** m,
                int& path_row_0, int& path_col_0, int& step) {
     int row = -1;
@@ -146,6 +175,9 @@ void step_four(int** matrix, int nrow, int ncol, int* rowCover, int* colCover, i
     }
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void find_star_in_col(int nrow, int** m, int c, int& r) {
     r = -1;
     for (int i = 0; i < nrow; i++)
@@ -153,12 +185,18 @@ void find_star_in_col(int nrow, int** m, int c, int& r) {
             r = i;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void find_prime_in_row(int nrow, int** m, int r, int& c) {
     for (int j = 0; j < nrow; j++)
         if (m[r][j] == 2)
             c = j;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void augment_path(int** m, int path_count, int** path) {
     for (int p = 0; p < path_count; p++)
         if (m[path[p][0]][path[p][1]] == 1)
@@ -167,6 +205,9 @@ void augment_path(int** m, int path_count, int** path) {
             m[path[p][0]][path[p][1]] = 1;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void clear_covers(int nrow, int ncol, int* rowCover, int* colCover) {
     for (int r = 0; r < nrow; r++)
         rowCover[r] = 0;
@@ -174,6 +215,9 @@ void clear_covers(int nrow, int ncol, int* rowCover, int* colCover) {
         colCover[c] = 0;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void erase_primes(int nrow, int ncol, int** m) {
     for (int r = 0; r < nrow; r++)
         for (int c = 0; c < ncol; c++)
@@ -181,6 +225,9 @@ void erase_primes(int nrow, int ncol, int** m) {
                 m[r][c] = 0;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void step_five(int nrow, int ncol, int* rowCover, int* colCover, int** m, int& path_row_0,
                int& path_col_0, int& path_count, int** path, int& step) {
     bool done;
@@ -212,6 +259,9 @@ void step_five(int nrow, int ncol, int* rowCover, int* colCover, int** m, int& p
     step = 3;
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void find_smallest(int** matrix, int nrow, int ncol, int* rowCover, int* colCover,
                    int& minval) {
     for (int r = 0; r < nrow; r++)
@@ -220,6 +270,9 @@ void find_smallest(int** matrix, int nrow, int ncol, int* rowCover, int* colCove
                 minval = MIN(minval, matrix[r][c]);
 }
 
+#ifdef __PYMOD__ 
+static 
+#endif
 void step_six(int** matrix, int nrow, int ncol, int* rowCover, int* colCover, int& step) {
     int minval = INT_MAX;
     find_smallest(matrix, nrow, ncol, rowCover, colCover, minval);
@@ -233,7 +286,29 @@ void step_six(int** matrix, int nrow, int ncol, int* rowCover, int* colCover, in
     step = 4;
 }
 
+#ifndef __PYMOD__
 int** runMunkers(int** matrix, int nrow, int ncol, bool max) {
+#endif
+#ifdef __PYMOD__
+
+static PyObject *
+runMunkers(PyObject *self, PyObject *args) {
+    PyObject *arg1;
+    PyObject *arr1;
+    int max_in;
+    // 
+    if (!PyArg_ParseTuple(args, "Oi", &arg1, &max_in))
+        return NULL;
+    
+    arr1 = PyArray_FROM_OTF(arg1, NPY_INT, NPY_IN_ARRAY);
+    //
+    int ** matrix = (int **) PyArray_DATA(arr1);
+    npy_intp * dims = PyArray_DIMS(arr1);
+    int nrow = dims[0]; 
+    int ncol = dims[1];
+    int max = (max_in == 1);
+    return NULL;
+#endif
 
     if (max == true) {
         int maxValue = matrix[0][0];
@@ -301,9 +376,51 @@ int** runMunkers(int** matrix, int nrow, int ncol, bool max) {
         }
     }
 
+#ifndef __PYMOD__
     return m;
+#endif
+#ifdef __PYMOD__
+    int dimensions[1];
+    PyArrayObject *result;
+    dimensions[0] = nrow;
+    result = (PyArrayObject *)PyArray_FromDims(1, dimensions, PyArray_DOUBLE);
+    //result->data = m;
+    return PyArray_Return(result);
+#endif
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef __PYMOD__
+static PyMethodDef munkers_methods[] = {
+    {"run_munkers", (PyCFunction)runMunkers, METH_VARARGS, "solves the assignment problem"},
+    {NULL, NULL, 0, NULL} 
+};
+
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT, "munkers", NULL,
+    -1, munkers_methods, NULL, NULL, NULL, NULL
+};
+
+// use this to ensure the name does not get garbled if c++ compiler is used
+PyMODINIT_FUNC
+PyObject * PyInit_munkers(void) {
+    return PyModule_Create(&moduledef);
+}
+#else
+
+PyMODINIT_FUNC
+initmunkers(void) {
+    import_array();
+    Py_InitModule("munkers", munkers_methods);
+}
+
+#endif
+#endif
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef __STANDALONE__
 int main() {
     int row = 3, col = 3;
@@ -324,3 +441,6 @@ int main() {
     return 0;
 }
 #endif
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
