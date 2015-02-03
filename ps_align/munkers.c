@@ -302,12 +302,17 @@ runMunkers(PyObject *self, PyObject *args) {
     
     arr1 = PyArray_FROM_OTF(arg1, NPY_INT, NPY_IN_ARRAY);
     //
-    int ** matrix = (int **) PyArray_DATA(arr1);
     npy_intp * dims = PyArray_DIMS(arr1);
+    int typenum = NPY_INT;
+    PyArray_Descr *descr = PyArray_DescrFromType(typenum);
+    int ** matrix;
+    if (PyArray_AsCArray(&arr1, (void *)&matrix, dims, PyArray_NDIM(arr1), descr) < 0){
+        PyErr_SetString( PyExc_TypeError,  "error on getting c array");
+        return NULL;
+    }
     int nrow = dims[0]; 
     int ncol = dims[1];
     int max = (max_in == 1);
-    return NULL;
 #endif
 
     if (max == true) {
@@ -380,12 +385,13 @@ runMunkers(PyObject *self, PyObject *args) {
     return m;
 #endif
 #ifdef __PYMOD__
-    int dimensions[1];
-    PyArrayObject *result;
-    dimensions[0] = nrow;
-    result = (PyArrayObject *)PyArray_FromDims(1, dimensions, PyArray_DOUBLE);
-    //result->data = m;
-    return PyArray_Return(result);
+    PyObject *pylist = PyTuple_New(nrow * ncol);
+    int count = 0;
+    for(int i = 0; i < nrow; i++)
+        for(int j = 0; j < ncol; j++)
+            PyTuple_SetItem(pylist, count++, PyInt_FromLong(m[i][j]));
+            
+    return pylist;
 #endif
 }
 
@@ -431,6 +437,12 @@ int main() {
             c[i][j] = (i + 1) * (j + 1);
     }
     //
+    printf("--inp:\n");
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++)
+            printf("%d ", c[i][j]);
+        printf("\n");
+    }
     c = runMunkers(c, row, col, true);
     printf("--cost:\n");
     for (int i = 0; i < row; i++) {
