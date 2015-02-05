@@ -39,14 +39,14 @@ sample_coords = np.array(map(lambda x: x.get_coord(), sample_atoms))
 ## Engineering in Medicine and Biology Society, 2004. IEMBS '04. 26th Annual International Conference of the IEEE , 
 ## vol.2, no., pp.2972,2975, 1-5 Sept. 2004
 ###################################################################################################################
-## Non-sequential superposition using the munkres algorithm 
-## get distance matrix
 dist_matrix = distance.cdist(ref_coords, sample_coords, 'euclidean').astype(np.int32)
+## Non-sequential superposition using the munkres algorithm 
 print 'in matrix shape: (%d, %d)' %(dist_matrix.shape[0], dist_matrix.shape[1])
 cost_matrix = np.array(munkers.run_munkers(dist_matrix, 0)).reshape(dist_matrix.shape)
 non_zero = cost_matrix > 0
-print 'alignment (P1-index, P2-index): '
+print 'non-sequential alignment (P1-index, P2-index): '
 np.set_printoptions(threshold='nan')
 print np.column_stack(np.where(non_zero))
+## Sequential superposition using DP
 
 ##
