@@ -5,12 +5,6 @@ import munkers
 import numpy as np
 from scipy.spatial import distance
 
-## Test
-#matrix = np.array([[1, 2, 3], [2, 4, 6], [3, 6, 9]]).astype(np.int32)
-#print matrix
-#print np.array(munkers.run_munkers(matrix, 1)).reshape(matrix.shape)
-#print "done"
-
 def get_ca_atom_list(model):
   atoms = []
   for chain in model:
@@ -41,6 +35,7 @@ sample_coords = np.array(map(lambda x: x.get_coord(), sample_atoms))
 ###################################################################################################################
 dist_matrix = distance.cdist(ref_coords, sample_coords, 'euclidean').astype(np.int32)
 ## Non-sequential superposition using the munkres algorithm 
+## maximal weight maximal cardinality matching (suitable for global match)
 print 'in matrix shape: (%d, %d)' %(dist_matrix.shape[0], dist_matrix.shape[1])
 cost_matrix = np.array(munkers.run_munkers(dist_matrix, 0)).reshape(dist_matrix.shape)
 non_zero = cost_matrix > 0
