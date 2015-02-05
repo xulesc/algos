@@ -244,8 +244,9 @@ void step_five(int nrow, int ncol, int* rowCover, int* colCover, int** m, int& p
             path_count += 1;
             path[path_count - 1][0] = r;
             path[path_count - 1][1] = path[path_count - 2][1];
-        } else
+        } else {
             done = true;
+        }
         if (!done) {
             find_prime_in_row(nrow, m, path[path_count - 1][0], c);
             path_count += 1;
@@ -356,26 +357,47 @@ runMunkers(PyObject *self, PyObject *args) {
 #endif
         switch (step) {
         case 1:
+#ifdef __CHATTY__
+    printf("step 1\n");
+#endif
             step_one(matrix, nrow, ncol, step);
             break;
         case 2:
+#ifdef __CHATTY__
+    printf("step 2\n");
+#endif
             step_two(matrix, nrow, ncol, rowCover, colCover, m, step);
             break;
         case 3:
+#ifdef __CHATTY__
+    printf("step 3\n");
+#endif
             step_three(nrow, ncol, colCover, m, step);
             break;
         case 4:
+#ifdef __CHATTY__
+    printf("step 4\n");
+#endif
             step_four(matrix, nrow, ncol, rowCover, colCover, m, path_row_0, path_col_0,
                       step);
             break;
         case 5:
+#ifdef __CHATTY__
+    printf("step 5\n");
+#endif
             step_five(nrow, ncol, rowCover, colCover, m, path_row_0, path_col_0,
                       path_count, path, step);
             break;
         case 6:
+#ifdef __CHATTY__
+    printf("step 6\n");
+#endif
             step_six(matrix, nrow, ncol, rowCover, colCover, step);
             break;
         case 7:
+#ifdef __CHATTY__
+    printf("preparing return values\n");
+#endif
             done = true;
             break;
         }
@@ -385,6 +407,9 @@ runMunkers(PyObject *self, PyObject *args) {
     return m;
 #endif
 #ifdef __PYMOD__
+#ifdef __CHATTY__
+    printf("preparing return values\n");
+#endif
     PyObject *pylist = PyTuple_New(nrow * ncol);
     int count = 0;
     for(int i = 0; i < nrow; i++)
