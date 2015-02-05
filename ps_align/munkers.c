@@ -188,8 +188,8 @@ void find_star_in_col(int nrow, int** m, int c, int& r) {
 #ifdef __PYMOD__ 
 static 
 #endif
-void find_prime_in_row(int nrow, int** m, int r, int& c) {
-    for (int j = 0; j < nrow; j++)
+void find_prime_in_row(int ncol, int** m, int r, int& c) {
+    for (int j = 0; j < ncol; j++)
         if (m[r][j] == 2)
             c = j;
 }
@@ -248,7 +248,7 @@ void step_five(int nrow, int ncol, int* rowCover, int* colCover, int** m, int& p
             done = true;
         }
         if (!done) {
-            find_prime_in_row(nrow, m, path[path_count - 1][0], c);
+            find_prime_in_row(ncol, m, path[path_count - 1][0], c);
             path_count += 1;
             path[path_count - 1][0] = path[path_count - 2][0];
             path[path_count - 1][1] = c;
