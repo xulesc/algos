@@ -27,15 +27,26 @@ class DPAlign:
     
 ## M[i][j] = w[i][j] + max(w[i-1][j-1], max(M[i'][j-1] V i' < i), max(M[i-1][j'] V j' < j))
   def align(self, i, j):
-    if not np.isnan(self.M[i][j]):
-      return self.M[i][j]
-    if i == 0 and j == 0:
-      self.M[i][j] = self.w[i][j]      
-    else:
-      v1 = np.array(map(lambda x: self.align(x, j), range(0, i)) + [-sys.maxint])
-      v2 = np.array(map(lambda x: self.align(i, x), range(0, j)) + [-sys.maxint])
-      self.M[i][j] = self.w[i][j] + max(self.w[i-1][j-1], v1.max(), v2.max())
-    return self.M[i][j]
+    I = i; J = j
+    for i in range(I + 1):
+      for j in range(J + 1):
+        if i == 0 and j == 0:
+          self.M[i][j] = self.w[i][j]
+          continue
+        if i == 0:
+          v1 = 0; 
+        else:
+          v1 = self.M.T[j][0:i].max()
+        if j == 0:
+          v2 = 0
+        else:
+          v2 = self.M[i][0:j].max()
+        if i == 0 or j == 0:
+          v3 = 0
+        else:
+          v3 = self.w[i-1][j-1]
+        self.M[i][j] = self.w[i][j] + max(v1, v2, v3)
+    return self.M[I-1][J-1]
     
   def _thread(self, i, j):
     self.path.append((i,j))
