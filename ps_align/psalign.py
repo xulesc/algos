@@ -5,8 +5,7 @@ import munkers
 import numpy as np
 from scipy.spatial import distance
 import sys
-import networkx as nx
-import matplotlib.pyplot as plt
+from datetime import datetime
 
 def get_ca_atom_list(model):
   atoms = []; reses = []
@@ -73,8 +72,9 @@ sample_structure = pdb_parser.get_structure("sample", "../pdb_data/%s" %pdomain2
 (ref_atoms, ref_reses) = get_ca_atom_list(ref_structure[0])
 (sample_atoms, sample_reses) = get_ca_atom_list(sample_structure[0])
 ##
-ref_atoms = ref_atoms[0:10]; ref_reses = ref_reses[0:10]
-sample_atoms = sample_atoms[0:10]; sample_reses = sample_reses[0:10]
+N=100
+ref_atoms = ref_atoms[0:N]; ref_reses = ref_reses[0:N]
+sample_atoms = sample_atoms[0:N]; sample_reses = sample_reses[0:N]
 ##
 ## get coordinates of CA atoms
 ref_coords = np.array(map(lambda x: x.get_coord(), ref_atoms))
@@ -88,17 +88,23 @@ sample_coords = np.array(map(lambda x: x.get_coord(), sample_atoms))
 dist_matrix = distance.cdist(ref_coords, sample_coords, 'euclidean').astype(np.int32)
 ## Non-sequential superposition using the munkres algorithm 
 ## maximal weight maximal cardinality matching (suitable for global match)
+t0 = datetime.now()
 cost_matrix = np.array(munkers.run_munkers(dist_matrix, 0)).reshape(dist_matrix.shape)
 non_zero = cost_matrix > 0
-## enable if printing large matrices np.set_printoptions(threshold='nan')
 edges = np.column_stack(np.where(non_zero))
+dif = datetime.now() - t0
+print "non-sequential threading: %d, %s, %d (msec)" %(len(edges), dist_matrix.shape, dif.total_seconds() * 1000)
+## enable if printing large matrices np.set_printoptions(threshold='nan')
 print [('%s_%d' %(ref_reses[i].get_resname(), i), '%s-%d' %(sample_reses[j].get_resname(),j)) for i,j in edges]
 
 ## Sequential superposition using DP
 siml_matrix = dist_matrix.max() - dist_matrix
 dpAlign = DPAlign(siml_matrix)
+t0 = datetime.now()
 dpAlign.align(siml_matrix.shape[0] - 1, siml_matrix.shape[1] - 1)
 path = dpAlign.thread()
+dif = datetime.now() - t0
+print "sequential threading: %d, %s, %d (msec)" %(len(path), dist_matrix.shape, dif.total_seconds() * 1000)
 print [('%s_%d' %(ref_reses[i].get_resname(), i), '%s-%d' %(sample_reses[j].get_resname(),j)) for i,j in path]
 
 ##
