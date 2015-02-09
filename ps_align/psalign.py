@@ -35,12 +35,12 @@ def superimpose(p1, p2):
     frms = 0; frot = []; ftran = []; p1_r = []; p2_r = []; medges = 0
     mrms = sys.float_info.max
     l1 = p1.shape[0]; l2 = p2.shape[0]; ml = max(l1, l2)
+    sup = QCPSuperimposer()
     for x in range(0, l1 - RESIDUE_LENGTH, RESIDUE_LENGTH):
         r1 = p1[x : x + RESIDUE_LENGTH]
         for y in range(0, l2 - RESIDUE_LENGTH, RESIDUE_LENGTH):
             r2 = p2[y : y + RESIDUE_LENGTH]
             ##
-            sup = QCPSuperimposer()
             sup.set(r1,r2)
             sup.run()
             rms = sup.get_rms()
