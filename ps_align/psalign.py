@@ -70,7 +70,7 @@ def superimpose(p1, p2):
                 p1_r = [x, x + RESIDUE_LENGTH-1]
                 p2_r = [y, y + RESIDUE_LENGTH-1]
                 medges = edges
-    return [frms, frot, ftran, p1_r, p2_r, edges]
+    return [frms, frot, ftran, p1_r, p2_r, medges]
             
 ## PDB domains
 pdomain1 = '1aa9.pdb'; pdomain2 = '1ash.pdb'
