@@ -293,7 +293,7 @@ int** runMunkers(int** matrix, int nrow, int ncol, bool max) {
 #ifdef __PYMOD__
 
 static PyObject *
-runMunkers(PyObject *self, PyObject *args) {
+runMunkres(PyObject *self, PyObject *args) {
     PyObject *arg1;
     PyObject *arr1;
     int max_in;
@@ -422,29 +422,29 @@ runMunkers(PyObject *self, PyObject *args) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef __PYMOD__
-static PyMethodDef munkers_methods[] = {
-    {"run_munkers", (PyCFunction)runMunkers, METH_VARARGS, "solves the assignment problem"},
+static PyMethodDef munkres_methods[] = {
+    {"run_munkres", (PyCFunction)runMunkres, METH_VARARGS, "solves the assignment problem"},
     {NULL, NULL, 0, NULL} 
 };
 
 #if PY_MAJOR_VERSION >= 3
 
 static struct PyModuleDef moduledef = {
-    PyModuleDef_HEAD_INIT, "munkers", NULL,
-    -1, munkers_methods, NULL, NULL, NULL, NULL
+    PyModuleDef_HEAD_INIT, "munkres", NULL,
+    -1, munkres_methods, NULL, NULL, NULL, NULL
 };
 
 // use this to ensure the name does not get garbled if c++ compiler is used
 PyMODINIT_FUNC
-PyObject * PyInit_munkers(void) {
+PyObject * PyInit_munkres(void) {
     return PyModule_Create(&moduledef);
 }
 #else
 
 PyMODINIT_FUNC
-initmunkers(void) {
+initmunkres(void) {
     import_array();
-    Py_InitModule("munkers", munkers_methods);
+    Py_InitModule("munkres", munkres_methods);
 }
 
 #endif
@@ -468,7 +468,7 @@ int main() {
             printf("%d ", c[i][j]);
         printf("\n");
     }
-    c = runMunkers(c, row, col, true);
+    c = runMunkres(c, row, col, true);
     printf("--cost:\n");
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++)

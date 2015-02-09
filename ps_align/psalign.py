@@ -16,7 +16,7 @@ RMS_THRESH = 0.00001
 #d = np.array([[1, 2, 3, 6], [2, 4, 6, 5], [3, 6, 9, 1]]).astype(np.int32)
 #d.resize(4,4)
 #print d
-#c = np.array(munkers.run_munkers(d, 0)).reshape(d.shape)
+#c = np.array(munkres.run_munkres(d, 0)).reshape(d.shape)
 #print c[0:3, 0:4]
 #sys.exit(-1)
 
@@ -54,7 +54,7 @@ def superimpose(p1, p2):
             ###################################################################################################################
             dist_matrix = distance.cdist(p1, dot(p2, rot) + tran, 'euclidean').astype(np.int32)
             dist_matrix.resize((ml, ml))
-            cost_matrix = np.array(munkers.run_munkers(dist_matrix, 0)).reshape(dist_matrix.shape)
+            cost_matrix = np.array(munkres.run_munkres(dist_matrix, 0)).reshape(dist_matrix.shape)
             cost_matrix = cost_matrix[0:l1, 0:l2]
             non_zero = cost_matrix > 0
             edges = np.column_stack(np.where(non_zero))
