@@ -61,7 +61,6 @@ def superimpose(p1, p2):
             a = np.array(map(lambda x : p1[x[0]], edges));  b = np.array(map(lambda x : p2[x[1]], edges));  
             d = a - b
             arms = sqrt(sum(sum(d*d))/len(edges))
-            sys.stdout.flush()
             if arms < RMS_THRESH:
                 return [arms, rot, tran]
             if mrms > arms:
