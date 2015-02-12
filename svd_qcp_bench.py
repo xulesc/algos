@@ -3,7 +3,7 @@
 import Bio.PDB
 import numpy
 from Bio.SVDSuperimposer import SVDSuperimposer
-from Bio.QCPSuperimposer import QCPSuperimposer
+from Bio.PDB.QCPSuperimposer import QCPSuperimposer
 from datetime import datetime
 from numpy import dot, sqrt
 import sys
