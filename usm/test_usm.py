@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import Bio.PDB.PDBParser
-from usm import USM
+from Bio.PDB.PSC.usm import USM
 import os
 import numpy as np
 
