@@ -31,7 +31,7 @@ class USM:
       coords[0:min(len(coords), self.max_coords)])
     return (zip(X, Y), self._get_cm_file_string(X, Y, n_contacts, n_atoms))
   
-  def usm(self, cm1, cm2):
+  def dist(self, cm1, cm2):
     x = self._in_memory_compress(cm1)
     y = self._in_memory_compress(cm2)
     xy = self._in_memory_compress(cm1 + cm2)
