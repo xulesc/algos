@@ -5,12 +5,13 @@ from scipy.spatial import distance
 import zlib
 
 class USM:
-  def __init__(self, contact_dist = 6.5):
+  def __init__(self, contact_dist = 6.5, max_coords = 1000):
     self.contact_dist = contact_dist
+    self.max_coords = max_coords
     
   def _get_cm_file_string(self, X, Y, n_contacts, n_atoms):
     st = '\n'.join(map(lambda x : '%s %s' %(x[0], x[1]), zip(X, Y)))
-    return '%d\t# Number of Residues\n%d\t# Number of Contacts\n%s\n' \
+    return '%d\t# Number of Residues\n%d\t# Number of Contacts\n%s' \
       %(n_atoms, n_contacts, st)
     
   def _compute_distance(self, k_xy, k_yx, k_x, k_y):
@@ -26,7 +27,8 @@ class USM:
     return [idx1[fidx], idx2[fidx], len(fidx[0]), len(coords)]
 
   def get_contact_map(self, coords):
-    [X, Y, n_contacts, n_atoms] = self._make_contact_map(coords)
+    [X, Y, n_contacts, n_atoms] = self._make_contact_map(
+      coords[0:min(len(coords), self.max_coords)])
     return (zip(X, Y), self._get_cm_file_string(X, Y, n_contacts, n_atoms))
   
   def usm(self, cm1, cm2):
