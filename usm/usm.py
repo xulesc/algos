@@ -15,8 +15,8 @@ class USM:
     return '%d\t# Number of Residues\n%d\t# Number of Contacts\n%s' \
       %(n_atoms, n_contacts, st)
     
-  def _compute_distance(self, k_xy, k_yx, k_x, k_y):
-    return max(k_yx-k_y, k_xy-k_x) / max(k_x, k_y)
+  def _compute_distance(self, x, y, xy, yx):
+    return max(yx - y, xy - x) / max(x, y)
     
   def _in_memory_compress(self, to_zip):
     return float(len(zlib.compress(to_zip)))
@@ -37,7 +37,7 @@ class USM:
     y = self._in_memory_compress(cm2)
     xy = self._in_memory_compress(cm1 + cm2)
     yx = self._in_memory_compress(cm2 + cm1)
-    return self._compute_distance(xy, yx, x, y)
+    return self._compute_distance(x, y, xy, yx)
 
 
 
