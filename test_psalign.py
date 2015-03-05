@@ -10,7 +10,7 @@ from Bio.PDB.PSC.align import Align
 from scipy.spatial import distance
 
 RESIDUE_LENGTH = 20
-RMS_THRESH = 0.00001
+RMS_THRESH = 0.001
 
 def get_ca_atom_list(model):
   atoms = []; reses = []
@@ -25,38 +25,20 @@ def get_ca_atom_list(model):
   
 def ssuperimpose(p1, p2):
     sup = QCPSuperimposer(); align = Align()
-    l1 = p1.shape[0]; l2 = p2.shape[0]; scores = []
-    lp2 = p2; min_rot = []; min_tran = []; old_rms = sys.maxint
-    for iter in xrange(10):
-        min_rms = sys.maxint; 
-        for x in range(0, l1 - RESIDUE_LENGTH):
-            r1 = p1[x : x + RESIDUE_LENGTH]; 
-            for y in range(0, l2 - RESIDUE_LENGTH):
-                r2 = lp2[y : y + RESIDUE_LENGTH]; 
-                sup.set(r1, r2)
-                sup.run()
-                lrms = sup.get_rms()
-                if lrms < min_rms:
-                    min_rms = lrms
-                    min_rot, min_tran = sup.get_rotran()
-# optimal from tmalign for 1aa9 & 1ash
-#        min_tran = np.array([-27.1331353550,-147.9265112953,0.9599895782])              
-#        min_rot  = np.array([
-#            [0.3141317101,0.2302470691,-0.9210361317],
-#            [0.9493282736,-0.0862496500,0.3022198320],
-#            [-0.0098538134,-0.9693024735,-0.2456738027]
-#        ])
-        pr2 = dot(lp2, min_rot) + min_tran
-        edges = align.sequential(p1, pr2)
-        a = np.array(map(lambda x : p1[x[0]], edges));  b = np.array(map(lambda x : pr2[x[1]], edges));
-        d = a - b
-        arms = sqrt(dot(d,d.T).diagonal().sum()/len(edges))
-        if arms >= old_rms:
-            return [old_rms, old_rot, old_tran, [], [], []]
-        lp2 = pr2
-        old_rms = arms
-        old_rot = min_rot
-        old_tran = min_tran
+    lp2 = p2; previous_rms = sys.maxint
+    rms = -1; rot = []; tran = []
+    while True:
+        edges = align.sequential(p1, lp2)
+        a = np.array(map(lambda x : p1[x[0]], edges));  b = np.array(map(lambda x : p2[x[1]], edges));
+        sup.set(a, b)
+        sup.run()
+        rms = sup.get_rms()
+        rot, tran = sup.get_rotran()
+        lp2 = dot(lp2, rot) + tran
+        if abs(previous_rms - rms) < RMS_THRESH:
+            break
+        previous_rms = rms
+    return [rms, rot, tran, None, None, None]
 
 def nssuperimpose(p1, p2):
     frms = 0; frot = []; ftran = []; p1_r = []; p2_r = []; medges = 0
@@ -110,14 +92,14 @@ ref_coords = np.array(map(lambda x: x.get_coord(), ref_atoms))
 sample_coords = np.array(map(lambda x: x.get_coord(), sample_atoms))
 ##
 ## non-sequential
-t0 = datetime.now()
-[rms, rot, tran, p1_r, p2_r, edges] = nssuperimpose(ref_coords, sample_coords)
-dif = datetime.now()-t0
-print "non-sequential threading: %d, %s, %d (msec)" %(len(edges), [len(ref_atoms), len(sample_atoms)], dif.total_seconds() * 1000)
+#t0 = datetime.now()
+#[rms, rot, tran, p1_r, p2_r, edges] = nssuperimpose(ref_coords, sample_coords)
+#dif = datetime.now()-t0
+#print "non-sequential threading: %d, %s, %d (msec)" %(len(edges), [len(ref_atoms), len(sample_atoms)], dif.total_seconds() * 1000)
 #print [('%s_%d' %(ref_reses[i].get_resname(), i), '%s-%d' %(sample_reses[j].get_resname(),j)) for i,j in edges]
-print "rmsd: %f" %rms
-print "rot: %s" %rot
-print "tran: %s" %tran
+#print "rmsd: %f" %rms
+#print "rot: %s" %rot
+#print "tran: %s" %tran
 #print "residues: %s:%s"  %(p1_r, p2_r)
 ## sequential
 t0 = datetime.now()
