@@ -4,3 +4,5 @@ out.log
 pdb_data/
 *out.log
 a.out
+*perf
+*data
