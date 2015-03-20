@@ -5,8 +5,8 @@ import numpy as np
 def dp2(gapcost, S):
     w = gapcost; (rows, cols) = S.shape
     ## init
-    dir = np.zeros((rows + 1, cols + 1), dtype=np.int32)
-    val = np.zeros((rows + 1, cols + 1), dtype=np.int32)
+    dir = np.zeros((rows, cols), dtype=np.int32)
+    val = np.zeros((rows, cols), dtype=np.int32)
     ## decide matrix and path
     for i in xrange(1, rows):
         for j in xrange(1, cols):
@@ -27,7 +27,7 @@ def dp2(gapcost, S):
     print dir
     print val
     ## extract the alignment
-    (i, j) = (rows, cols); path = [(i - 1, j - 1)]
+    (i, j) = (rows - 1, cols - 1); path = [(i, j)]
     while i > 0 and j > 0:
         if dir[i][j] == 1:
             path.append((i - 1, j - 1))
@@ -95,3 +95,4 @@ if __name__ == '__main__':
     
     S = np.array(S)    
     print dp(gapcost, S)
+    print dp2(gapcost, S)
