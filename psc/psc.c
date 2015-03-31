@@ -17,7 +17,7 @@ void fill_score(float **dist, float **score, int *prot1_len, int *prot2_len,
 
 #define FNAME_LEN 256
 #define NDIM 3
-#define LOG_DEBUG
+//#define LOG_DEBUG
 
 ///////////////////////////// M A C R O S //////////////////////////////////////
 #ifndef max
