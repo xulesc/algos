@@ -185,7 +185,7 @@ void fill_euclid_dist(float (*prot1_coords)[3], float (*prot2_coords)[3],
 			y2 = prot2_coords[iter2][1];
 			z2 = prot2_coords[iter2][2];			
 			dist[iter1][iter2] = sqrt((pow(x2 - x1, 2) + 
-				pow(y2 - y1, 2) + pow(z2 - z1, 2))/3);
+				pow(y2 - y1, 2) + pow(z2 - z1, 2)));
 		}
 	}
 #ifdef LOG_DEBUG	
