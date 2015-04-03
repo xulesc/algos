@@ -3,7 +3,9 @@
 DATA_DIR="/media/lvm/xule/workspace/noc_mcpsc/data/contact_maps_chew_kedem"
 SIM_FILE="similarities"
 SIM_FILE_F="$SIM_FILE.scaled"
-CMD="gzip -f -c"
+CMD1="python lzw.py"
+CMD2="./lzw"
+CMD=$CMD2
 
 process()
 {
@@ -16,16 +18,17 @@ cat t2 > t2t1; cat t1 >> t2t1
 #y=$((`cat t2 | $CMD | wc -c`))
 #xy=$((`cat t1t2 | $CMD | wc -c`))
 #yx=$((`cat t2t1 | $CMD | wc -c`))
-x=$((`python lzw.py t1`))
-y=$((`python lzw.py t2`))
-xy=$((`python lzw.py t1t2`))
-yx=$((`python lzw.py t2t1`))
+x=$((`$CMD t1`))
+y=$((`$CMD t2`))
+xy=$((`$CMD t1t2`))
+yx=$((`$CMD t2t1`))
 
 echo "" | awk -v nm="$1 $2" -v x=$x -v y=$y -v xy=$xy -v yx=$yx '{d=(x<y)?y:x;n=(xy-x<yx-y)?yx-y:xy-x}END{print nm,n/d}'
 }
 
 pairwise_similarities()
 {
+rm $SIM_FILE
 for f1 in `ls $DATA_DIR/`; do
     for f2 in `ls $DATA_DIR/`; do
         process $f1 $f2 >> $SIM_FILE

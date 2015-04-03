@@ -1,3 +1,4 @@
+## Source: http://www.joe-bowers.com/static/lzw
 """
 A stream friendly, simple compression library, built around
 iterators. See L{compress} and L{decompress} for the easiest way to
