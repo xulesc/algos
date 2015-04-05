@@ -227,6 +227,7 @@ class BitPacker(object):
         for pt in codepoints:
 
             newbits = inttobits(pt, nextwidth)
+            print newbits
             tailbits = tailbits + newbits
 
             # PAY ATTENTION. This calculation should be driven by the
@@ -834,7 +835,8 @@ def bitstobytes(bits):
 if __name__ == '__main__':
     import sys
     mybytes = readbytes(sys.argv[1])    
-    print len(map(lambda x: x, compress(mybytes)))
+    #print len(map(lambda x: x, compress(mybytes)))
+    print map(lambda x: x, compress(mybytes))
     ## to del
     #enc = Encoder()
     #bigstr = b"gabba gabba yo gabba gabba gabba yo gabba gabba gabba yo gabba gabba gabba yo"

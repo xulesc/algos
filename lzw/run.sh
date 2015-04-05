@@ -5,7 +5,8 @@ SIM_FILE="similarities"
 SIM_FILE_F="$SIM_FILE.scaled"
 CMD1="python lzw.py"
 CMD2="./lzw"
-CMD=$CMD2
+CMD3="python mylzw.py"
+CMD=$CMD3
 
 process()
 {
