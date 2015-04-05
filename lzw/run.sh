@@ -41,5 +41,5 @@ done
 ### create pariwise sim
 pairwise_similarities
 ### scale pairwise sim
-#python scale.py $SIM_FILE $SIM_FILE_F
+python scale.py $SIM_FILE $SIM_FILE_F
 

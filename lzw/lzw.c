@@ -1,4 +1,4 @@
-// Source: wikipedia
+// Source: http://rosettacode.org/wiki/LZW_compression#C
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -119,7 +119,13 @@ byte* lzw_encode(byte *in, int max_bits)
 				_setsize(d, next_shift *= 2);
 		}
 	}
- 
+ 	/*int i, j;
+	for(i = 0; i < 512; i++) {
+		for(j = 0; j < 256; j++) {
+			printf("%u ", d[i].next[j]);
+		}
+		printf("\n");
+	}*/
 	write_bits(code);
 	write_bits(M_EOD);
 	if (tmp) write_bits(tmp);
