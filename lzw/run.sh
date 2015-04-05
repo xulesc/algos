@@ -6,6 +6,7 @@ SIM_FILE_F="$SIM_FILE.scaled"
 CMD1="python lzw.py"
 CMD2="./lzw"
 CMD3="python mylzw.py"
+CMD4="gzip -f -c"
 CMD=$CMD2
 
 process()
