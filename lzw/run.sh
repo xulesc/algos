@@ -1,12 +1,12 @@
 #!/bin/sh
 
-DATA_DIR="/media/lvm/xule/workspace/noc_mcpsc/data/contact_maps_chew_kedem"
+DATA_DIR="../pdb_test_data"
 SIM_FILE="similarities"
 SIM_FILE_F="$SIM_FILE.scaled"
 CMD1="python lzw.py"
 CMD2="./lzw"
 CMD3="python mylzw.py"
-CMD=$CMD3
+CMD=$CMD2
 
 process()
 {
@@ -41,5 +41,5 @@ done
 ### create pariwise sim
 pairwise_similarities
 ### scale pairwise sim
-python scale.py $SIM_FILE $SIM_FILE_F
+#python scale.py $SIM_FILE $SIM_FILE_F
 
