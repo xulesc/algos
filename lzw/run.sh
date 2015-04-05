@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DATA_DIR="../pdb_test_data"
+DATA_DIR="/media/lvm/xule/workspace/noc_mcpsc/data/contact_maps_chew_kedem/"
 SIM_FILE="similarities"
 SIM_FILE_F="$SIM_FILE.scaled"
 CMD1="python lzw.py"
