@@ -8,6 +8,8 @@ import time
 import sys
 from collections import defaultdict
 from collections import Counter
+import itertools
+from scipy.spatial.distance import cdist
 
 RESIDUE_LENGTH=8
 
@@ -22,12 +24,15 @@ def get_ca_atom_list(model):
 				pass
 	return (atoms, reses)
 	
-def make_residues(coords): return map(lambda x : '%s' %coords[x:x+RESIDUE_LENGTH].tolist(), range(0,len(coords)))
+def make_residues2(coords): return map(lambda x : '%s' %center_coords(coords[x:x+RESIDUE_LENGTH]).tolist(), range(0,len(coords)))
 
-def center_coords(coords):
-	# center on centroid
-	av1 = sum(coords) / len(coords)
-	return coords - av1	                        
+def make_rep(res):
+	return sorted(set(cdist(res,res,'euclidean').flatten()))
+
+def make_residues(coords):
+	return map(lambda x : '%s' %make_rep(center_coords(coords[x:x+RESIDUE_LENGTH])), range(0,len(coords)))
+
+def center_coords(coords): return coords - (sum(coords) / len(coords))
 	
 def make_ngram_hash(inverted_index, dom_coords, dom_coords_idx):
 	coords = center_coords(dom_coords)
@@ -35,12 +40,11 @@ def make_ngram_hash(inverted_index, dom_coords, dom_coords_idx):
 	
 def do_query(dom_coords,inverted_index):
 	residues = make_residues(center_coords(dom_coords))
-	dom_indices = []
-	for residue in residues:
-		dom_indices += inverted_index[residue]
+	l2 = map(lambda x : inverted_index[x], residues)
+	dom_indices = list(itertools.chain(*l2))
 	print Counter(dom_indices)
 
-data_dir = '../pdb_data'; file_names = ['6xia.pdb','1ash.pdb','1aa9.pdb']
+data_dir = '../pdb_data'; file_names = ['6xia.pdb','1ash.pdb','1aa9.pdb','1bab.pdb','1cd8.pdb']
 file_paths = map(lambda x : '%s/%s' %(data_dir, x), file_names)
 pdb_parser = Bio.PDB.PDBParser(QUIET = True)
 ## load domains and extract coordinates
