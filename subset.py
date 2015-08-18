@@ -39,6 +39,8 @@ class SubsetGenerator:
 
     def get_data(self): return self.data
 
+    def set_data(self, data): self.data = data
+
     def make_subset(self, similarity=0.25):        
         # make L2-norm per row
         norms = map(np.linalg.norm, self.data)
@@ -47,14 +49,12 @@ class SubsetGenerator:
         # make CDF
         cdf = np.cumsum(norms)
         # make subset
-        subset = []; visited = {}
+        visited = {}
+        # loop till similarity criteria is met
         while True:
-            idx = np.searchsorted(cdf, random.uniform(0, 1), sorter=None)
-            if idx in visited.keys(): continue
-            visited[idx] = 1
-            subset.append(idx)
+            visited[np.searchsorted(cdf, random.uniform(0, 1), sorter=None)] = 1
             if sum(norms[visited.keys()]) >= similarity: break
-        return self.data[subset]
+        return self.data[visited.keys()]
         
 if __name__ == '__main__':
     test_file_name = 'subset.dat'
