@@ -11,19 +11,19 @@ class SubsetGenerator:
         self._SKIP = lambda x : not x.startswith('#')
         self.data = self.__readsparsedata()
 
-    def __readline(self, l):
-        z = map(lambda x : tuple(x.split(self._SEP1)), l.split(self._SEP2))
-        idx, data = zip(*z)
+    def __read_line(self, l):
+        zipped = map(lambda x : tuple(x.split(self._SEP1)), l.split(self._SEP2))
+        idx, data = zip(*zipped)
         idx = map(int, idx); data = map(float, data)
-        r = np.zeros(max(idx) + 1)
-        r[idx] = data
-        return r
+        ret = np.zeros(max(idx) + 1)
+        ret[idx] = data
+        return ret
 
-    def __readsparsedata(self):
+    def __read_sparse_data(self):
         # read data
-        data = map(self.__readline, filter(self._SKIP, open(self._fname)))
+        vectors = map(self.__readline, filter(self._SKIP, open(self._fname)))
         # find longest vector
-        max_entries = max(map(len, data))
+        max_entries = max(map(len, vectors))
         # create masked vectors
         maskf = lambda b : np.ma.array(np.resize(b,max_entries),
             mask=np.concatenate([np.zeros(len(b),dtype=bool),
@@ -31,10 +31,10 @@ class SubsetGenerator:
         # return square np matrix
         return np.array(map(maskf, data))
 
-    def getData(self): return self.data
+    def get_data(self): return self.data
         
         
 if __name__ == '__main__':
     testFileName = 'subset.dat'
     s = SubsetGenerator(testFileName)
-    print s.getData()
+    print s.get_data()
