@@ -13,7 +13,8 @@ class SubsetGenerator:
         self._SEP1 = ':'
         self._SEP2 = ' '
         self._skipf = lambda x : not x.startswith('#')
-        self.data = self.__readsparsedata()
+        if fname != None:
+            self.data = self.__readsparsedata()
 
     def __read_line(self, l):
         zipped = map(lambda x : tuple(x.split(self._SEP1)), l.split(self._SEP2))
