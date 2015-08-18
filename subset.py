@@ -1,4 +1,8 @@
 #!/usr/bin/python
+#
+# Follow naming conventions described at:
+#  PEP 0008 (https://www.python.org/dev/peps/pep-0008/)
+#
 
 import numpy as np
 
@@ -8,7 +12,7 @@ class SubsetGenerator:
         self._FVMIN = 0
         self._SEP1 = ':'
         self._SEP2 = ' '
-        self._SKIP = lambda x : not x.startswith('#')
+        self._skipf = lambda x : not x.startswith('#')
         self.data = self.__readsparsedata()
 
     def __read_line(self, l):
@@ -21,7 +25,7 @@ class SubsetGenerator:
 
     def __read_sparse_data(self):
         # read data
-        vectors = map(self.__readline, filter(self._SKIP, open(self._fname)))
+        vectors = map(self.__readline, filter(self._skipf, open(self._fname)))
         # find longest vector
         max_entries = max(map(len, vectors))
         # create masked vectors
@@ -35,6 +39,6 @@ class SubsetGenerator:
         
         
 if __name__ == '__main__':
-    testFileName = 'subset.dat'
-    s = SubsetGenerator(testFileName)
+    test_file_name = 'subset.dat'
+    s = SubsetGenerator(test_file_name)
     print s.get_data()
