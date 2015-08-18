@@ -10,6 +10,7 @@ from collections import defaultdict
 from collections import Counter
 import itertools
 from scipy.spatial.distance import cdist
+from numpy.linalg import norm
 
 RESIDUE_LENGTH=8
 
@@ -27,7 +28,8 @@ def get_ca_atom_list(model):
 def make_residues2(coords): return map(lambda x : '%s' %center_coords(coords[x:x+RESIDUE_LENGTH]).tolist(), range(0,len(coords)))
 
 def make_rep(res):
-	return sorted(set(cdist(res,res,'euclidean').flatten()))
+	return map(lambda x : norm(res[x+1]-res[x]), range(0,len(res)-1))
+	#return sorted(set(cdist(res,res,'euclidean').flatten()))
 
 def make_residues(coords):
 	return map(lambda x : '%s' %make_rep(center_coords(coords[x:x+RESIDUE_LENGTH])), range(0,len(coords)))

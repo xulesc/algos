@@ -16,14 +16,20 @@ cat $DATA_DIR/$2 > t2
 cat t1 > t1t2; cat t2 >> t1t2
 cat t2 > t2t1; cat t1 >> t2t1
 
+## gzip
 #x=$((`cat t1 | $CMD | wc -c`))
 #y=$((`cat t2 | $CMD | wc -c`))
 #xy=$((`cat t1t2 | $CMD | wc -c`))
 #yx=$((`cat t2t1 | $CMD | wc -c`))
-x=$((`$CMD t1`))
-y=$((`$CMD t2`))
-xy=$((`$CMD t1t2`))
-yx=$((`$CMD t2t1`))
+## lzw
+x=$((`$CMD e t1 t1.o; cat t1.o | wc -c`))
+y=$((`$CMD e t2 t2.o; cat t2.o | wc -c`))
+xy=$((`$CMD e t1t2 t1t2.o; cat t1t2.o | wc -c`))
+yx=$((`$CMD e t2t1 t2t1.o; cat t2t1.o | wc -c`))
+#x=$((`$CMD t1`))
+#y=$((`$CMD t2`))
+#xy=$((`$CMD t1t2`))
+#yx=$((`$CMD t2t1`))
 
 echo "" | awk -v nm="$1 $2" -v x=$x -v y=$y -v xy=$xy -v yx=$yx '{d=(x<y)?y:x;n=(xy-x<yx-y)?yx-y:xy-x}END{print nm,n/d}'
 }

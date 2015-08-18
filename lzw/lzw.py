@@ -516,6 +516,7 @@ class Encoder(object):
 
 
     def _encode_byte(self, byte):
+        #print self._prefixes
         # Yields one or zero bytes, AND changes the internal state of
         # the codebook and prefix buffer.
         #
@@ -542,7 +543,7 @@ class Encoder(object):
 
         # Teensy hack, CLEAR_CODE and END_OF_INFO_CODE aren't
         # equal to any possible string.
-
+        print 'resetting dictionary'
         self._prefixes = dict([(struct.pack("B", codept), codept) for codept in range(256)])
         self._prefixes[ CLEAR_CODE ] = CLEAR_CODE
         self._prefixes[ END_OF_INFO_CODE ] = END_OF_INFO_CODE

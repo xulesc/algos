@@ -1,7 +1,7 @@
 prg_name := psc
 prg_srcs := $(wildcard *.c)
 prg_objs := ${program_srcs:.c=.o}
-CFLAGS := -ffast-math $(profile) #-O3
+CFLAGS := -ffast-math $(profile) -O3
 LFLAGS := -lm -static $(profile)
 
 ## For the phdNode 32 bit setup we want to compile the programs
@@ -20,7 +20,7 @@ PSC: psc.c
 	$(cc) -o psc psc.c $(CFLAGS) $(LFLAGS) 
 
 USM: usm.c
-	$(cpp) -o usm usm.c $(CFLAGS) $(LFLAGS) -pg -lboost_iostreams -lboost_system -lpthread -lz
+	$(cpp) -o usm usm.c $(CFLAGS) $(LFLAGS) -lboost_iostreams -lboost_system -lpthread -lz
 
 clean:
 	rm -f psc usm
