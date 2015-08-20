@@ -40,6 +40,24 @@ class SubsetGenerator:
         return ret
 
     def __read_sparse_data(self):
+
+        """ Load spare matrix data to dense Numpy array.
+
+        The method loads sparse data from a file into a dense array. The data
+        is expected to be in the following format e.g.
+
+        0:.56 10:5.6
+        1:8.2 2:3.2
+        ...
+
+        Matrix rows are expected to be separated by a newline and the columns
+        are separated by a space. Each column data is expected to be in the 
+        format <column_index>:<column_value>.
+
+        Minimum column_value is assumed to be 0 and missing values are filled
+        in with 0s.
+        """
+        
         # read data
         vectors = map(self.__read_line, filter(self._skipf, open(self._fname)))
         # find longest vector
