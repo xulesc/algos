@@ -48,7 +48,7 @@ class SubsetGenerator:
         maskf = lambda b : np.ma.array(np.resize(b,max_entries),
             mask=np.concatenate([np.zeros(len(b),dtype=bool),
                                  np.ones(max_entries-len(b), dtype=bool)]))
-        # return square np matrix
+        # return dense np matrix
         return np.array(map(maskf, vectors))
 
     def get_data(self): return self.data
