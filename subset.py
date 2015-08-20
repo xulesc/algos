@@ -74,7 +74,25 @@ class SubsetGenerator:
 
     def set_data(self, data): self.data = data
 
-    def make_subset(self, similarity=0.25):        
+    def make_subset(self, similarity=0.25):
+
+        """ Return a subset of data matrix.
+
+        The method generates a subset of the data matrix as described in the
+        aforementioned paper.
+
+        L2-norms are calculated for all rows of the original data matrix. The
+        norms are converted to probabilities by dividing with the sum of the
+        norm vector. Uniform sampling from the cumulative sub vector over the
+        norm-probabilitiy vector is used for generating the subset. Stopping
+        criteria for the subset generation is the similarity between the sum
+        of norms of all rows of the original data matrix and the subset matrix.
+
+        The similarity argument accepted by the method has a default value of
+        0.25 i.e. 25% similarity between the sum of norms between the subset
+        and the original data matrix.
+        """
+        
         # make L2-norm per row
         norms = map(np.linalg.norm, self.data)
         # convert norms to probabilities
