@@ -16,8 +16,8 @@ class SubsetGenerator:
     the original matrix making use of the sampling method described in 
     http://www.cs.rpi.edu/~drinep/Papers/Drineas_MFO_04.pdf.
 
-    Input data to the class is a sparse matrix representing the matrix however
-    the subset generated is returned as a dense Numpy matrix.
+    Input data to the class is a sparse matrix of the data however the subset 
+    generated is returned as a dense Numpy matrix.
     '''
     def __init__(self, fname=None):
         self._fname = fname
