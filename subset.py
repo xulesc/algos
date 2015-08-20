@@ -89,8 +89,8 @@ class SubsetGenerator:
         of norms of all rows of the original data matrix and the subset matrix.
 
         The similarity argument accepted by the method has a default value of
-        0.25 i.e. 25% similarity between the sum of norms between the subset
-        and the original data matrix.
+        0.25 i.e. 25% similarity between the sum of norms of the subset and 
+        the original data matrix.
         """
         
         # make L2-norm per row
