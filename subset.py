@@ -52,7 +52,8 @@ class SubsetGenerator:
 
         Matrix rows are expected to be separated by a newline and the columns
         are separated by a space. Each column data is expected to be in the 
-        format <column_index>:<column_value>.
+        format <column_index>:<column_value>. Rows starting with # are excluded
+        as comment lines.
 
         Minimum column_value is assumed to be 0 and missing values are filled
         in with 0s.
