@@ -11,7 +11,7 @@ class SubsetGenerator:
 
     """ Return a representative subset of a given matrix.
 
-    Generate row based subset from a given matrix of feature vectors.
+    Generate row based subset from a given data matrix.
 
     The class provides functionality for selecting rows from a sparse matrix of
     feature vectors. The subset generated is expected to be a representative of
