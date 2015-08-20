@@ -8,6 +8,17 @@ import numpy as np
 import random
 
 class SubsetGenerator:
+    '''
+    Generate row based subset from a given matrix of feature vectors.
+
+    The class provides functionality for selecting rows from a sparse matrix of
+    feature vectors. The subset generated is expected to be a representative of
+    the original matrix making use of the sampling method described in 
+    http://www.cs.rpi.edu/~drinep/Papers/Drineas_MFO_04.pdf.
+
+    Input data to the class is a sparse matrix representing the matrix however
+    the subset generated is returned as a dense Numpy matrix.
+    '''
     def __init__(self, fname=None):
         self._fname = fname
         self._FVMIN = 0
