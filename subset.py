@@ -101,7 +101,8 @@ class SubsetGenerator:
         cdf = np.cumsum(norms)
         # make subset
         visited = {}
-        # loop till similarity criteria is met
+        # loop till similarity criteria is met. using map handles duplicate
+        # row selection.
         while sum(norms[visited.keys()]) < similarity:
             visited[np.searchsorted(cdf, random.uniform(0, 1), sorter=None)] = 1
         return self.data[visited.keys()]
