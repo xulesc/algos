@@ -84,7 +84,7 @@ class SubsetGenerator:
 
         L2-norms are calculated for all rows of the original data matrix. The
         norms are converted to probabilities by dividing with the sum of the
-        norm vector. Uniform sampling from the cumulative sub vector over the
+        norm vector. Uniform sampling from the cumulative sum vector over the
         norm-probabilitiy vector is used for generating the subset. Stopping
         criteria for the subset generation is the similarity between the sum
         of norms of all rows of the original data matrix and the subset matrix.
