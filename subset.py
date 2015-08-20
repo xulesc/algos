@@ -62,9 +62,8 @@ class SubsetGenerator:
         # make subset
         visited = {}
         # loop till similarity criteria is met
-        while True:
+        while sum(norms[visited.keys()]) < similarity:
             visited[np.searchsorted(cdf, random.uniform(0, 1), sorter=None)] = 1
-            if sum(norms[visited.keys()]) >= similarity: break
         return self.data[visited.keys()]
         
 if __name__ == '__main__':
