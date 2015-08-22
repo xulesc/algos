@@ -134,10 +134,15 @@ if __name__ == '__main__':
         print s.get_data()
         print s.make_subset()
     ## Test 2: performance w.r.t size
+    print 'experiment/test for performance (speed) w.r.t to time'
     from datetime import datetime
+    import sys
     s = SubsetGenerator()
     of = open('perf_size.dat', 'w')
-    for size in range(3,10001):
+    for size in range(10, 5000):
+        if size % 100 == 0:
+            sys.stdout.write('.')
+            sys.stdout.flush()
         data = np.random.rand(size, size)
         s.set_data(data)
         timed(s.make_subset, size, of)
