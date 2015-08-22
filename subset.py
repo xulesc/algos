@@ -109,7 +109,13 @@ class SubsetGenerator:
         return self.data[visited.keys()]
         
 if __name__ == '__main__':
+    ## Test 1: load from file
+    import os
     test_file_name = 'subset.dat'
-    s = SubsetGenerator(test_file_name)
-    print s.get_data()
-    print s.make_subset()
+    if os.path.exists(test_file_name):
+        print "testing load from file"
+        s = SubsetGenerator(test_file_name)
+        print s.get_data()
+        print s.make_subset()
+    ##
+    
