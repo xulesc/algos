@@ -139,12 +139,13 @@ if __name__ == '__main__':
     import sys
     s = SubsetGenerator()
     of = open('perf_size.dat', 'w')
-    for size in range(10, 5000):
-        if size % 100 == 0:
+    for size in range(10, 500):
+        if size % 10 == 0:
             sys.stdout.write('.')
             sys.stdout.flush()
         data = np.random.rand(size, size)
         s.set_data(data)
         timed(s.make_subset, size, of)
+    print ' '
     of.close()
 
