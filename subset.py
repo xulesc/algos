@@ -107,6 +107,22 @@ class SubsetGenerator:
         while sum(norms[visited.keys()]) < similarity:
             visited[np.searchsorted(cdf, random.uniform(0, 1), sorter=None)] = 1
         return self.data[visited.keys()]
+
+def timed(f, size, of = None):
+
+    """ Run method timed
+    
+    This method provides a convinent means for running timed tests.
+    """
+    
+    start = datetime.now()
+    ret = f()
+    elapsed = datetime.now() - start
+    if of == None:
+        print 'for size (square): %d, elapsed time (msec): %f' %(size,
+            elapsed.microseconds*1.0/1000)
+    else:
+        of.write('%d %f\n' %(size, elapsed.microseconds*1.0/1000))
         
 if __name__ == '__main__':
     ## Test 1: load from file
@@ -117,5 +133,13 @@ if __name__ == '__main__':
         s = SubsetGenerator(test_file_name)
         print s.get_data()
         print s.make_subset()
-    ##
-    
+    ## Test 2: performance w.r.t size
+    from datetime import datetime
+    s = SubsetGenerator()
+    of = open('perf_size.dat', 'w')
+    for size in range(3,10001):
+        data = np.random.rand(size, size)
+        s.set_data(data)
+        timed(s.make_subset, size, of)
+    of.close()
+
