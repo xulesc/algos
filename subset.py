@@ -134,7 +134,7 @@ if __name__ == '__main__':
         print s.get_data()
         print s.make_subset()
     ## Test 2: performance w.r.t size
-    print 'experiment/test for performance (speed) w.r.t to time'
+    print 'experiment/test for performance (speed) w.r.t to size'
     from datetime import datetime
     import sys
     s = SubsetGenerator()
